@@ -1,64 +1,102 @@
 function getComputerChoice() {
-  return Math.floor(Math.random() * 3) + 1;
+    let move = Math.floor(Math.random() * 3) + 1;
+    let choice = (move == 1) ? "Rock" : (move == 2) ? "Paper" : "Scissors";
+    return choice; 
 }
 
 let playerPoints = 0;
 let computerPoints = 0;
+let playerGamesWon = 0 
+let compGamesWon = 0
+let playerChoice 
+let pName
 
-game();
+askName()
 
-//computer choice : 1 = rock, 2 = paper, 3 = scissors
+function askName() {
+  pName = prompt('Whats your name')
+  welcome()
+}
+
+function welcome() {
+  const welcomeMessage = document.querySelector('.welcome');
+  welcomeMessage.textContent = "Welcome " + pName
+}
+
+
+const buttons = document.querySelector('.buttons')
+const buttonRock = document.querySelector('.rock');
+const buttonPaper = document.querySelector('.paper');
+const buttonScissors = document.querySelector('.scissors')
+const result = document.querySelector('.result')
+const pick = document.querySelector('.pick')
+const points = document.querySelector('.points')
+const wins = document.querySelector('.games-won')
+
+
+buttonRock.addEventListener('click', () => {
+  playerChoice = "Rock";
+  playRound();
+});
+buttonPaper.addEventListener('click', () => {
+  playerChoice = "Paper"
+  playRound()
+});
+buttonScissors.addEventListener('click', () => {
+  playerChoice = "Paper"
+  playRound()
+});
 
 
 function playRound() {
-    let playerChoice = prompt("pick a move - rock / paper / scissors (lowercase)");
+    
     let computerChoice = getComputerChoice();
   
-      if (playerChoice == "rock" && computerChoice == 3 || 
-        playerChoice == "paper"  && computerChoice == 1 || 
-        playerChoice == "scissors" && computerChoice == 2) {
+      if (playerChoice == "Rock" && computerChoice == "Scissors" || 
+        playerChoice == "Paper"  && computerChoice == "Rock" || 
+        playerChoice == "Scissors" && computerChoice == "Paper") {
             playerPoints += 1;
-            alert('1 point for you\nYou: ' + playerPoints + 
-            '\nComputer: ' + computerPoints);
+            pick.textContent = playerChoice + ' beats ' + computerChoice 
+            points.textContent = pName + ': ' + playerPoints + 
+            ' | \nComputer: ' + computerPoints
         }
-      else if (playerChoice == "rock" && computerChoice == 2 || 
-      playerChoice == "paper" && computerChoice == 3 || 
-      playerChoice == "scissors" && computerChoice == 1) {
+      else if (playerChoice == "Rock" && computerChoice == "Paper" || 
+      playerChoice == "Paper" && computerChoice == "Scissors" || 
+      playerChoice == "Scissors" && computerChoice == "Rock") {
             computerPoints += 1;
-            alert('1 point for computer\nYou: ' + playerPoints + 
-            '\nComputer: ' + computerPoints);
+            pick.textContent = computerChoice + ' beats ' + playerChoice  
+            points.textContent = pName + ': ' + playerPoints + 
+            ' | \nComputer: ' + computerPoints
       } 
-      else if (playerChoice == "rock" && computerChoice == 1 || 
-      playerChoice == "paper" && computerChoice == 2 || 
-      playerChoice == "scissors" && computerChoice == 3) {
-        playerPoints +=0;
-        computerPoints +=0;
-        alert('Draw\nYou: ' + playerPoints + 
-        '\nComputer: ' + computerPoints)
-      }
-      else {
-        computerPoints += 1;
-        alert('1 point for computer\nYou: ' + playerPoints + 
-        '\nComputer: ' + computerPoints);
+      else if (playerChoice == "Rock" && computerChoice == "Rock" || 
+      playerChoice == "Paper" && computerChoice == "Paper" || 
+      playerChoice == "Scissors" && computerChoice == "Scissors") {
+            playerPoints += 0;
+            computerPoints += 0;
+            pick.textContent = 'Draw'  
+            points.textContent = pName + ': ' + playerPoints + ' | \nComputer: ' + computerPoints
       }
     
-    
-      
+    check();
 }
 
-function game() {
+function check() {
 
-    while (playerPoints < 3 && computerPoints < 3) {
-    playRound();
-}
 
-    if (playerPoints > computerPoints) {
-        alert('you won scumbag');
-        console.log('player has ' + playerPoints + ' points')
-        console.log('computer has ' + computerPoints + ' points')
-    } else if (computerPoints > playerPoints){
-        alert('you failed');
-        console.log('player has ' + playerPoints + ' points')
-        console.log('computer has ' + computerPoints + ' points')
+    if (playerPoints == 5) {
+        reset();
+        pick.textContent = "Good job " + pName;
+        playerGamesWon += 1
+        wins.textContent = 'Wins: ' + pName + " " + playerGamesWon  + " | Computer " + compGamesWon
+    } else if (computerPoints == 5){
+        reset();
+        pick.textContent = "Thanks for participating";
+        compGamesWon += 1
+        wins.textContent = 'Wins: ' + pName + " " + playerGamesWon  + " | Computer " + compGamesWon
     } 
+}
+
+function reset() {
+  playerPoints = 0
+  computerPoints = 0
 }
